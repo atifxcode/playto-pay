@@ -1,12 +1,12 @@
 import { format } from "date-fns";
 import { 
   ArrowRight, Bot, User, CheckCircle2, XCircle, 
-  Zap, Info, Clock
+  Zap, Info, Clock, Hash
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 // Components for different event types
-function TransitionEvent({ data }) {
+function TransitionEvent({ data, attemptNumber }) {
   const isApi = data.actor === 'api';
   const Icon = isApi ? User : Bot;
   const isError = data.to_status === 'failed';
@@ -22,7 +22,15 @@ function TransitionEvent({ data }) {
               <Icon className="w-3.5 h-3.5" />
               {data.actor || "system"}
             </span>
-            <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">State Transition</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">State Transition</span>
+              {attemptNumber && (
+                <span className="flex items-center gap-0.5 bg-gray-100 dark:bg-[#2e303a]/50 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded text-[10px] font-semibold tracking-wide">
+                  <Hash className="w-2.5 h-2.5" />
+                  Attempt {attemptNumber}
+                </span>
+              )}
+            </div>
           </div>
           
           <div className="flex items-center gap-3 text-sm font-medium">
@@ -98,14 +106,45 @@ function TimelineItem({ event, isLast }) {
 
       {/* Content */}
       <div className="pr-2 sm:pr-4">
-        <TransitionEvent data={event.data} />
+        <TransitionEvent data={event.data} attemptNumber={event.attemptNumber} />
       </div>
     </div>
   );
 }
 
-export function PayoutTimeline({ transitions = [] }) {
+export function PayoutTimeline({ transitions = [], attempts = [] }) {
   const events = [];
+  
+  const getAttemptNumber = (t) => {
+    if (t.actor !== 'worker' || !attempts || attempts.length === 0) return null;
+    const tTime = new Date(t.created_at).getTime();
+    
+    let matchedAttempt = null;
+    // Strict match (within +/- 3 seconds of attempt boundaries)
+    attempts.forEach(a => {
+      const aStart = new Date(a.started_at).getTime() - 3000;
+      const aEnd = new Date(a.finished_at).getTime() + 3000;
+      if (tTime >= aStart && tTime <= aEnd) {
+        matchedAttempt = a;
+      }
+    });
+
+    // Fallback best match (useful if transition occurs right outside strict bounds)
+    if (!matchedAttempt) {
+      let minDiff = Infinity;
+      attempts.forEach(a => {
+        const diffStart = Math.abs(tTime - new Date(a.started_at).getTime());
+        const diffEnd = Math.abs(tTime - new Date(a.finished_at).getTime());
+        const minLocalDiff = Math.min(diffStart, diffEnd);
+        if (minLocalDiff < minDiff && minLocalDiff < 10000) {
+          minDiff = minLocalDiff;
+          matchedAttempt = a;
+        }
+      });
+    }
+    
+    return matchedAttempt ? matchedAttempt.attempt_number : null;
+  };
   
   transitions.forEach(t => {
     events.push({
@@ -113,6 +152,7 @@ export function PayoutTimeline({ transitions = [] }) {
       id: `trans-${t.id}`,
       timestamp: new Date(t.created_at).getTime(),
       data: t,
+      attemptNumber: getAttemptNumber(t)
     });
   });
   

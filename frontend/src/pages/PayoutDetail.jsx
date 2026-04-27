@@ -83,7 +83,7 @@ export function PayoutDetail() {
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Execution Timeline</h2>
           </div>
           <div className="p-6">
-            <PayoutTimeline transitions={payout.transitions} />
+            <PayoutTimeline transitions={payout.transitions} attempts={payout.attempts} />
           </div>
         </div>
       </div>

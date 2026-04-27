@@ -69,20 +69,20 @@ export function PayoutDetail() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white dark:bg-[#16171d] shadow-sm border dark:border-[#2e303a] rounded-2xl overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-200 dark:border-[#2e303a]">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Processing Attempts</h2>
-              <p className="text-sm text-gray-500 mt-1">Detailed log of network attempts made by the payout engine.</p>
-            </div>
-            <PayoutAttemptsTable attempts={payout.attempts} />
+      <div className="space-y-6">
+        <div className="bg-white dark:bg-[#16171d] shadow-sm border dark:border-[#2e303a] rounded-2xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-[#2e303a] bg-gray-50/50 dark:bg-[#1a1b23]">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Processing Attempts</h2>
+            <p className="text-sm text-gray-500 mt-1">Detailed log of network attempts made by the payout engine.</p>
           </div>
+          <PayoutAttemptsTable attempts={payout.attempts} />
         </div>
         
-        <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-[#16171d] shadow-sm border dark:border-[#2e303a] rounded-2xl p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">State Transitions</h2>
+        <div className="bg-white dark:bg-[#16171d] shadow-sm border dark:border-[#2e303a] rounded-2xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-200 dark:border-[#2e303a] bg-gray-50/50 dark:bg-[#1a1b23]">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Execution Timeline</h2>
+          </div>
+          <div className="p-6">
             <PayoutTimeline transitions={payout.transitions} />
           </div>
         </div>

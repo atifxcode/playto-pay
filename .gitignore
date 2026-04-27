@@ -1,0 +1,44 @@
+# --- Python / Django ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# --- Node / React (Frontend) ---
+node_modules/
+/frontend/dist/
+/frontend/build/
+.eslintcache
+.stylelintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- Celery & Redis ---
+# Usually these don't create local files unless using a file-based broker
+celerybeat-schedule
+*.dump.rdb
+
+# --- Database ---
+# Local postgres data (if using a local data folder)
+postgres-data/
+
+# --- Operating System ---
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

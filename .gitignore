@@ -28,9 +28,6 @@ yarn-error.log*
 celerybeat-schedule
 *.dump.rdb
 
-# --- Database ---
-# Local postgres data (if using a local data folder)
-postgres-data/
 
 # --- Operating System ---
 .DS_Store

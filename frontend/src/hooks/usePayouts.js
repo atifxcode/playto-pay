@@ -1,17 +1,3 @@
-// import { useQuery } from "@tanstack/react-query";
-// import { api } from "../lib/api";
-
-// export function usePayouts() {
-//   return useQuery({
-//     queryKey: ["payouts"],
-//     queryFn: async () => {
-//       const { data } = await api.get("/payouts/");
-//       return data;
-//     },
-//     refetchInterval: 3000,
-//   });
-// }
-
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";

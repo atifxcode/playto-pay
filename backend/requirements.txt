@@ -5,10 +5,5 @@ python-dotenv==1.2.2
 celery==5.6.3
 redis==7.4.0
 django-cors-headers==4.9.0
-django
-djangorestframework
-psycopg[binary]
-python-dotenv
-django-cors-headers
-celery
-redis
+gunicorn
+dj-database-url

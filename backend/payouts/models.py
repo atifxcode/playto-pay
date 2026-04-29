@@ -27,7 +27,7 @@ class Payout(models.Model):
 
     class Meta:
         constraints = [
-            CheckConstraint(check=Q(amount_paise__gt=0), name="payout_amount_positive"),
+            CheckConstraint(condition=Q(amount_paise__gt=0), name="payout_amount_positive"),
         ]
         indexes = [
             models.Index(fields=["status", "locked_at"]),

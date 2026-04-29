@@ -26,9 +26,9 @@ class LedgerEntry(models.Model):
 
     class Meta:
         constraints = [
-            CheckConstraint(check=Q(amount_paise__gt=0), name="ledger_amount_positive"),
+            CheckConstraint(condition=Q(amount_paise__gt=0), name="ledger_amount_positive"),
             CheckConstraint(
-                check=(
+                condition=(
                     Q(entry_type="credit", payout__isnull=True)
                     | Q(entry_type__in=["hold", "release"], payout__isnull=False)
                 ),

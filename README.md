@@ -6,7 +6,7 @@ A robust, ledger-backed payout engine built with Django, DRF, Celery, React, and
 
 | Resource | Link |
 |----------|------|
-| **Frontend Application** | https://playto-pay-six.vercel.app/dashboard |
+| **Frontend Application** | https://playto-pay-six.vercel.app/ |
 | **Backend API** | https://playto-pay-w0s5.onrender.com |
 | **Demo Video** | https://www.youtube.com/watch?v=Mxr2OHrpBb4&t=167s |
 

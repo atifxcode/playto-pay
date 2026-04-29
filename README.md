@@ -1,6 +1,14 @@
 # Playto Payout Engine
 
-A robust, ledger-backed payout engine built with Django, DRF, Celery, and PostgreSQL. It enforces idempotency, prevents balance overdrafts via row-level locks, and maintains an append-only ledger.
+A robust, ledger-backed payout engine built with Django, DRF, Celery, React, and PostgreSQL. It enforces idempotency, prevents balance overdrafts via row-level locks, and maintains an append-only ledger.
+
+## 🚀 Live Links
+
+| Resource | Link |
+|----------|------|
+| **Frontend Application** | https://playto-pay-six.vercel.app/dashboard |
+| **Backend API** | https://playto-pay-w0s5.onrender.com |
+| **Demo Video** | https://www.youtube.com/watch?v=Mxr2OHrpBb4&t=167s |
 
 ## Deliverables Checklist
 
@@ -14,12 +22,22 @@ A robust, ledger-backed payout engine built with Django, DRF, Celery, and Postgr
 ## Setup Instructions
 
 
+### Prerequisites
+
+- Python 3.10+
+- PostgreSQL database (Neon recommended)
+- Redis server (`localhost:6379`)
+- Node.js 18+ for frontend
+
 ### Running Without Docker (Local Setup)
 
-If you prefer to run the services directly on your host machine without Docker:
-
 1. **Clone the repository** and navigate to the root directory.
-2. **Setup Database and Redis**: Neon PostgreSQL – Create a free database on Neon and update .env (backend) and a Redis server running on `localhost:6379`.
+
+2. **Setup Database and Redis**:
+   - Create a free PostgreSQL database on [Neon](https://neon.tech)
+   - Update `backend/.env` with your database credentials
+   - Ensure Redis is running on `localhost:6379`
+
 3. **Setup the Backend**:
 
    ```bash
@@ -54,42 +72,30 @@ If you prefer to run the services directly on your host machine without Docker:
    ```
    The backend API will be available at `http://localhost:8000` and the frontend application at `http://localhost:5173`.
 
-
-### Prerequisites
-
-- Docker & Docker Compose
-- (Optional) Python 3.10+, Virtualenv to run locally outside Docker
-
-### Running the Project
-
-1. Clone the repository and navigate to the root directory.
-2. Run the application stack:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-   This will spin up the database, Redis (for Celery), the backend API server, the Celery worker, and the Celery beat scheduler. The frontend container will also start.
-
-3. Apply migrations and seed the database:
-
-   ```bash
-   docker-compose exec backend python manage.py migrate
-   docker-compose exec backend python manage.py seed_data
-   ```
-
-4. Create a superuser (optional, for admin access):
-   ```bash
-   docker-compose exec backend python manage.py createsuperuser
-   ```
-
-The backend is now running at `http://localhost:8000/`.
-The frontend is now running at `http://localhost:5173/`.
-
 ### Running Tests
 
 To execute the test suite (which includes concurrency and idempotency tests):
 
 ```bash
-docker-compose exec backend pytest
+cd backend
+pytest payouts/tests.py -v
 ```
+
+---
+
+## 📝 Deployment Notes
+
+**Celery Worker Not Deployed on Production**
+
+The deployed backend on Render does not include a Celery worker. Here's why:
+
+- **Cost**: Celery worker services on Render require paid plans ($7+/month minimum) to run continuously
+- **Current Setup**: 
+  - ✅ Backend API deployed on Render (free tier with limited resources)
+  - ✅ Redis cache deployed on Render (paid, ~$5/month)
+  - ❌ Celery Worker **not deployed** (would require additional paid service)
+
+**Implications**:
+- Synchronous payout requests work fine ✅
+- Asynchronous task processing (e.g., `process_payout`) is queued but **not processed** in production
+- For local development and testing, run Celery workers locally (see step 4 in Setup Instructions)
